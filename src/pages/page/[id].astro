@@ -1,0 +1,116 @@
+---
+import { parseScrapboxContent } from '../../utils/scrapbox-parser';
+
+export async function getStaticPaths() {
+  const PROJECT_NAME = 'tomohirotsuji-plants';
+  const response = await fetch(`https://scrapbox.io/api/pages/${PROJECT_NAME}`);
+  const data = await response.json();
+  
+  return data.pages.map((page) => ({
+    params: { id: page.id },
+    props: { title: page.title },
+  }));
+}
+
+const { id } = Astro.params;
+const { title } = Astro.props;
+const PROJECT_NAME = 'tomohirotsuji-plants';
+
+const response = await fetch(`https://scrapbox.io/api/pages/${PROJECT_NAME}/${encodeURIComponent(title)}`);
+const pageData = await response.json();
+
+// Scrapbox記法を解釈
+const parsedContent = pageData.lines ? parseScrapboxContent(pageData.lines) : [];
+---
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{pageData.title || '植物管理ブログ'}</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        line-height: 1.8;
+      }
+      .back-link {
+        display: inline-block;
+        margin-bottom: 20px;
+        color: #0066cc;
+        text-decoration: none;
+      }
+      h1 {
+        border-bottom: 2px solid #333;
+        padding-bottom: 10px;
+        margin-bottom: 30px;
+      }
+      h2, h3, h4 {
+        margin-top: 30px;
+        margin-bottom: 15px;
+        color: #333;
+      }
+      .content {
+        margin-bottom: 40px;
+      }
+      .content p {
+        margin: 10px 0;
+      }
+      .content img {
+        max-width: 100%;
+        height: auto;
+        margin: 20px 0;
+        border-radius: 5px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+      .content li {
+        list-style: none;
+        padding: 5px 0;
+      }
+      .content a {
+        color: #0066cc;
+        text-decoration: none;
+      }
+      .content a:hover {
+        text-decoration: underline;
+      }
+      .internal-link {
+        color: #0066cc;
+        background: #f0f8ff;
+        padding: 2px 6px;
+        border-radius: 3px;
+      }
+      .tag {
+        color: #666;
+        background: #f5f5f5;
+        padding: 2px 8px;
+        border-radius: 3px;
+        font-size: 0.9em;
+      }
+      .meta {
+        color: #666;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #ddd;
+        font-size: 0.9em;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="/" class="back-link">← 一覧に戻る</a>
+    <h1>{pageData.title}</h1>
+    <div class="content">
+      {parsedContent.map((item) => (
+        <Fragment set:html={item.html} />
+      ))}
+    </div>
+    {pageData.created && (
+      <div class="meta">
+        <p>作成日: {new Date(pageData.created * 1000).toLocaleDateString('ja-JP')}</p>
+        <p>更新日: {new Date(pageData.updated * 1000).toLocaleDateString('ja-JP')}</p>
+      </div>
+    )}
+  </body>
+</html>

@@ -1,0 +1,60 @@
+---
+const PROJECT_NAME = 'tomohirotsuji-plants';
+const response = await fetch(`https://scrapbox.io/api/pages/${PROJECT_NAME}`);
+const data = await response.json();
+const pages = data.pages;
+---
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>植物管理ブログ</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      h1 {
+        border-bottom: 2px solid #333;
+        padding-bottom: 10px;
+      }
+      .page-list {
+        list-style: none;
+        padding: 0;
+      }
+      .page-item {
+        margin: 20px 0;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+      .page-item a {
+        text-decoration: none;
+        color: #0066cc;
+        font-size: 1.2em;
+        font-weight: bold;
+      }
+      .page-meta {
+        color: #666;
+        font-size: 0.9em;
+        margin-top: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🌱 植物管理ブログ</h1>
+    <ul class="page-list">
+      {pages.map((page) => (
+        <li class="page-item">
+          <a href={`/page/${page.id}`}>{page.title}</a>
+          <div class="page-meta">
+            更新日: {new Date(page.updated * 1000).toLocaleDateString('ja-JP')}
+          </div>
+        </li>
+      ))}
+    </ul>
+  </body>
+</html>
