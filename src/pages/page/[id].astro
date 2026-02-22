@@ -1,5 +1,6 @@
 ---
 import { parseScrapboxContent } from '../../utils/scrapbox-parser';
+import { getBreadcrumbs, EXCLUDED_PAGES } from '../../utils/categories';
 
 export async function getStaticPaths() {
   const PROJECT_NAME = 'tomohirotsuji-plants';
@@ -11,10 +12,12 @@ export async function getStaticPaths() {
     data.pages.filter((page) => page.image).map((page) => [page.title, page.image])
   );
 
-  return data.pages.map((page) => ({
-    params: { id: page.id },
-    props: { title: page.title, titleToId, titleToImage },
-  }));
+  return data.pages
+    .filter((page) => !EXCLUDED_PAGES.has(page.title))
+    .map((page) => ({
+      params: { id: page.id },
+      props: { title: page.title, titleToId, titleToImage },
+    }));
 }
 
 const { id } = Astro.params;
@@ -27,6 +30,8 @@ const pageData = await response.json();
 // Scrapbox記法を解釈
 // lines[0] はタイトル行なのでスキップ
 const parsedContent = pageData.lines ? parseScrapboxContent(pageData.lines.slice(1), titleToId, titleToImage) : [];
+
+const breadcrumbs = getBreadcrumbs(title, titleToId);
 ---
 
 <html lang="ja">
@@ -47,6 +52,29 @@ const parsedContent = pageData.lines ? parseScrapboxContent(pageData.lines.slice
         margin-bottom: 20px;
         color: #0066cc;
         text-decoration: none;
+      }
+      nav.breadcrumb {
+        font-size: 0.85em;
+        color: #999;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        display: flex;
+        align-items: center;
+        gap: 2px;
+      }
+      nav.breadcrumb a {
+        color: #0066cc;
+        text-decoration: none;
+      }
+      nav.breadcrumb a:hover {
+        text-decoration: underline;
+      }
+      nav.breadcrumb .sep {
+        margin: 0 4px;
+        color: #ccc;
+      }
+      nav.breadcrumb .current {
+        color: #666;
       }
       h1 {
         border-bottom: 2px solid #333;
@@ -139,7 +167,21 @@ const parsedContent = pageData.lines ? parseScrapboxContent(pageData.lines.slice
     </style>
   </head>
   <body>
-    <a href="/" class="back-link">← 一覧に戻る</a>
+    {breadcrumbs.length > 0 ? (
+      <nav class="breadcrumb">
+        {breadcrumbs.map((crumb, i) => (
+          <>
+            {i > 0 && <span class="sep">›</span>}
+            {crumb.href
+              ? <a href={crumb.href}>{crumb.label}</a>
+              : <span class="current">{crumb.label}</span>
+            }
+          </>
+        ))}
+      </nav>
+    ) : (
+      <a href="/" class="back-link">← 一覧に戻る</a>
+    )}
     <h1>{pageData.title}</h1>
     <div class="content">
       {parsedContent.map((item) => (
