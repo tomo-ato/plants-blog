@@ -86,5 +86,25 @@ function parseInlineElements(text, titleToId = {}, titleToImage = {}) {
 
 // 全行を解釈
 export function parseScrapboxContent(lines, titleToId = {}, titleToImage = {}) {
-  return lines.map(line => parseScrapboxLine(line.text, titleToId, titleToImage));
+  const items = [];
+  for (const line of lines) {
+    const item = parseScrapboxLine(line.text, titleToId, titleToImage);
+
+    // 直前が画像で「撮影日：」で始まる行 → figure + figcaption にまとめる
+    if (
+      item.type === 'text' &&
+      line.text.trimStart().startsWith('撮影日：') &&
+      items.length > 0 &&
+      items[items.length - 1].type === 'image'
+    ) {
+      const prev = items.pop();
+      items.push({
+        type: 'figure',
+        html: `<figure>${prev.html}<figcaption>${line.text}</figcaption></figure>`,
+      });
+    } else {
+      items.push(item);
+    }
+  }
+  return items;
 }
