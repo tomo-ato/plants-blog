@@ -61,17 +61,17 @@ function parseInlineElements(text, titleToId = {}, titleToImage = {}) {
       const iconUrl = convertToR2Url(rawUrl);
       return `<img src="${iconUrl}" class="scrapbox-icon" alt="${pageName}" />`;
     }
-    // KNOWN_TAGSに含まれる場合は明示的にタグ扱い
+    // KNOWN_TAGSに含まれる場合は明示的にタグ扱い（#付きで表示）
     const safeContent = content.replace(/#/g, '&#35;');
     if (KNOWN_TAGS.has(content)) {
-      return `<a href="/tag?q=${encodeURIComponent(content)}" class="tag">${safeContent}</a>`;
+      return `<a href="/tag?q=${encodeURIComponent(content)}" class="tag">#${safeContent}</a>`;
     }
-    // 内部リンク：タイトル→IDで解決。存在しないページはタグ扱い
+    // 内部リンク：タイトル→IDで解決。存在しないページは#付きタグ扱い
     const pageId = titleToId[content];
     if (pageId) {
       return `<a href="/page/${pageId}" class="internal-link">${safeContent}</a>`;
     }
-    return `<a href="/tag?q=${encodeURIComponent(content)}" class="tag">${safeContent}</a>`;
+    return `<a href="/tag?q=${encodeURIComponent(content)}" class="tag">#${safeContent}</a>`;
   });
 
   // 通常のURLを処理（HTML属性内のURLは対象外、#タグより先に処理）
