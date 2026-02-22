@@ -97,9 +97,10 @@ export function parseScrapboxContent(lines, titleToId = {}, titleToImage = {}) {
       items[items.length - 1].type === 'image'
     ) {
       const prev = items.pop();
+      const captionHtml = item.html.replace(/^<p>/, '').replace(/<\/p>$/, '');
       items.push({
         type: 'figure',
-        html: `<figure>${prev.html}<figcaption>${line.text}</figcaption></figure>`,
+        html: `<figure>${prev.html}<figcaption>${captionHtml}</figcaption></figure>`,
       });
     } else {
       items.push(item);
