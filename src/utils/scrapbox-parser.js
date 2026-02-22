@@ -1,4 +1,14 @@
 // Scrapboxの行を解釈してHTMLに変換
+const R2_BASE_URL = 'https://pub-914d924a13a1433c85c0aedcd204e1ff.r2.dev/webp';
+
+function convertToR2Url(originalUrl) {
+  const match = originalUrl.match(/https:\/\/scrapbox\.io\/files\/([a-f0-9]+)\.[a-z]+/i);
+  if (match) {
+    return `${R2_BASE_URL}/${match[1]}.webp`;
+  }
+  return originalUrl;
+}
+
 export function parseScrapboxLine(text) {
   // 空行
   if (!text.trim()) {
@@ -15,7 +25,8 @@ export function parseScrapboxLine(text) {
   // 画像 [https://...画像URL]
   const imageMatch = text.match(/\[?(https:\/\/[^\s\]]+\.(?:png|jpg|jpeg|gif|webp))\]?/i);
   if (imageMatch) {
-    return { type: 'image', html: `<img src="${imageMatch[1]}" alt="画像" />` };
+    const imgSrc = convertToR2Url(imageMatch[1]);
+    return { type: 'image', html: `<img src="${imgSrc}" alt="画像" />` };
   }
 
   // インデント（リスト）
@@ -39,15 +50,16 @@ function parseInlineElements(text) {
     if (content.startsWith('http')) {
       return `<a href="${content}" target="_blank" rel="noopener">${content}</a>`;
     }
-    // 内部リンク
-    return `<a href="/page/${encodeURIComponent(content)}" class="internal-link">${content}</a>`;
+    // 内部リンク（テキスト内の#をエンティティ化してタグ処理を防ぐ）
+    const safeContent = content.replace(/#/g, '&#35;');
+    return `<a href="/page/${encodeURIComponent(content)}" class="internal-link">${safeContent}</a>`;
   });
 
-  // #タグを処理
-  text = text.replace(/#([a-zA-Z0-9_]+)/g, '<span class="tag">#$1</span>');
-
-  // 通常のURLを処理
+  // 通常のURLを処理（#タグより先に処理してURLフラグメントを保護）
   text = text.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+
+  // #タグを処理（行頭またはスペース直後のみ。URL内の#や「C#」などは対象外）
+  text = text.replace(/(^|\s)#([^\s<#]+)/g, '$1<span class="tag">#$2</span>');
 
   return text;
 }

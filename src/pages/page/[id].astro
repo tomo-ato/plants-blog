@@ -55,34 +55,35 @@ const parsedContent = pageData.lines ? parseScrapboxContent(pageData.lines) : []
       .content {
         margin-bottom: 40px;
       }
-      .content p {
+      .content :global(p) {
         margin: 10px 0;
       }
-      .content img {
-        max-width: 100%;
+      .content :global(img) {
+        max-width: 400px;
+        width: 100%;
         height: auto;
         margin: 20px 0;
         border-radius: 5px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       }
-      .content li {
+      .content :global(li) {
         list-style: none;
         padding: 5px 0;
       }
-      .content a {
+      .content :global(a) {
         color: #0066cc;
         text-decoration: none;
       }
-      .content a:hover {
+      .content :global(a:hover) {
         text-decoration: underline;
       }
-      .internal-link {
+      .content :global(.internal-link) {
         color: #0066cc;
         background: #f0f8ff;
         padding: 2px 6px;
         border-radius: 3px;
       }
-      .tag {
+      .content :global(.tag) {
         color: #666;
         background: #f5f5f5;
         padding: 2px 8px;
