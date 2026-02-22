@@ -1,0 +1,116 @@
+---
+import { parseScrapboxContent } from '../utils/scrapbox-parser';
+import SiteNav from '../components/SiteNav.astro';
+
+const PROJECT_NAME = 'tomohirotsuji-plants';
+
+const [listRes, pageRes] = await Promise.all([
+  fetch(`https://scrapbox.io/api/pages/${PROJECT_NAME}`),
+  fetch(`https://scrapbox.io/api/pages/${PROJECT_NAME}/Tomo_at`),
+]);
+const listData = await listRes.json();
+const pageData = await pageRes.json();
+
+const titleToId = Object.fromEntries(listData.pages.map((p) => [p.title, p.id]));
+const titleToImage = Object.fromEntries(
+  listData.pages.filter((p) => p.image).map((p) => [p.title, p.image])
+);
+
+const parsedContent = pageData.lines
+  ? parseScrapboxContent(pageData.lines.slice(1), titleToId, titleToImage)
+  : [];
+---
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>About - 植物管理ブログ</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        line-height: 1.8;
+      }
+      nav.breadcrumb {
+        font-size: 0.85em;
+        color: #999;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 2px;
+      }
+      nav.breadcrumb a {
+        color: #0066cc;
+        text-decoration: none;
+      }
+      nav.breadcrumb a:hover {
+        text-decoration: underline;
+      }
+      nav.breadcrumb .sep {
+        margin: 0 4px;
+        color: #ccc;
+      }
+      nav.breadcrumb .current {
+        color: #666;
+      }
+      h1 {
+        border-bottom: 2px solid #333;
+        padding-bottom: 10px;
+        margin-bottom: 30px;
+      }
+      .content {
+        margin-bottom: 40px;
+      }
+      .content :global(p) {
+        margin: 10px 0;
+      }
+      .content :global(img) {
+        display: block;
+        max-width: 640px;
+        width: 100%;
+        height: auto;
+        margin: 20px auto;
+        border-radius: 5px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+      .content :global(a) {
+        color: #0066cc;
+        text-decoration: none;
+      }
+      .content :global(a:hover) {
+        text-decoration: underline;
+      }
+      .content :global(.internal-link) {
+        color: #0066cc;
+        background: #f0f8ff;
+        padding: 2px 6px;
+        border-radius: 3px;
+      }
+      .content :global(.tag) {
+        color: #666;
+        background: #f5f5f5;
+        padding: 2px 8px;
+        border-radius: 3px;
+        font-size: 0.9em;
+      }
+    </style>
+  </head>
+  <body>
+    <SiteNav />
+    <nav class="breadcrumb">
+      <a href="/">トップ</a>
+      <span class="sep">›</span>
+      <span class="current">About</span>
+    </nav>
+    <h1>{pageData.title || 'About'}</h1>
+    <div class="content">
+      {parsedContent.map((item) => (
+        <Fragment set:html={item.html} />
+      ))}
+    </div>
+  </body>
+</html>

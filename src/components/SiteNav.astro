@@ -1,0 +1,59 @@
+---
+const pathname = Astro.url.pathname;
+
+const navItems = [
+  { label: 'トップ', href: '/' },
+  { label: 'Tillandsia', href: '/genus/tillandsia' },
+  { label: 'Oxalis', href: '/genus/oxalis' },
+  { label: 'Lepanthes', href: '/genus/lepanthes' },
+  { label: 'Avonia', href: '/genus/avonia' },
+  { label: 'Article', href: '/article' },
+  { label: 'About', href: '/about' },
+];
+
+function isActive(href: string): boolean {
+  if (href === '/') return pathname === '/';
+  return pathname.startsWith(href);
+}
+---
+
+<nav class="site-nav">
+  <ul>
+    {navItems.map((item) => (
+      <li>
+        <a href={item.href} class={isActive(item.href) ? 'active' : ''}>
+          {item.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  .site-nav {
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 24px;
+  }
+  .site-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .site-nav li a {
+    display: inline-block;
+    padding: 10px 14px;
+    color: #444;
+    text-decoration: none;
+    font-size: 0.88em;
+    border-bottom: 2px solid transparent;
+  }
+  .site-nav li a:hover {
+    color: #0066cc;
+  }
+  .site-nav li a.active {
+    color: #0066cc;
+    border-bottom-color: #0066cc;
+  }
+</style>

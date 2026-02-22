@@ -1,5 +1,6 @@
 ---
 import { getCategory, TILLANDSIA_PARENTS, EXCLUDED_PAGES } from '../../utils/categories.js';
+import SiteNav from '../../components/SiteNav.astro';
 
 const PROJECT_NAME = 'tomohirotsuji-plants';
 
@@ -123,6 +124,7 @@ const sortedPages =
     </style>
   </head>
   <body>
+    <SiteNav />
     <nav class="breadcrumb">
       <a href="/">トップ</a>
       <span class="sep">›</span>
