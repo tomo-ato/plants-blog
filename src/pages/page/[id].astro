@@ -25,7 +25,8 @@ const response = await fetch(`https://scrapbox.io/api/pages/${PROJECT_NAME}/${en
 const pageData = await response.json();
 
 // Scrapbox記法を解釈
-const parsedContent = pageData.lines ? parseScrapboxContent(pageData.lines, titleToId, titleToImage) : [];
+// lines[0] はタイトル行なのでスキップ
+const parsedContent = pageData.lines ? parseScrapboxContent(pageData.lines.slice(1), titleToId, titleToImage) : [];
 ---
 
 <html lang="ja">
