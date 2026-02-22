@@ -90,10 +90,9 @@ export function parseScrapboxContent(lines, titleToId = {}, titleToImage = {}) {
   for (const line of lines) {
     const item = parseScrapboxLine(line.text, titleToId, titleToImage);
 
-    // 直前が画像で「撮影日：」で始まる行 → figure + figcaption にまとめる
+    // 直前が画像でテキスト行 → figure + figcaption にまとめる
     if (
       item.type === 'text' &&
-      line.text.trimStart().startsWith('撮影日：') &&
       items.length > 0 &&
       items[items.length - 1].type === 'image'
     ) {

@@ -87,6 +87,12 @@ const parsedContent = pageData.lines ? parseScrapboxContent(pageData.lines.slice
         margin-top: 6px;
         text-align: left;
       }
+      .content :global(figcaption a) {
+        color: #0066cc;
+        text-decoration: underline;
+        background: none;
+        padding: 0;
+      }
       .content :global(img.scrapbox-icon) {
         height: 1.3em;
         width: auto;
