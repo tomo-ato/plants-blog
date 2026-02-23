@@ -69,17 +69,13 @@ const pages = data.pages
     .page-grid { grid-template-columns: repeat(2, 1fr); }
   }
 
-  /* カード（横並び・高さ固定） */
+  /* カード（横並び） */
   .page-card {
-    height: 83px; /* SP: 110px * 3/4 */
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     overflow: hidden;
     background: #fff;
     transition: box-shadow 0.2s;
-  }
-  @media (min-width: 601px) {
-    .page-card { height: 120px; } /* PC: 160px * 3/4 */
   }
   .page-card:hover {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.09);
@@ -87,9 +83,12 @@ const pages = data.pages
   .page-card a {
     display: flex;
     align-items: stretch;
-    height: 100%;
+    min-height: 83px;
     text-decoration: none;
     color: inherit;
+  }
+  @media (min-width: 601px) {
+    .page-card a { min-height: 120px; }
   }
 
   /* サムネイル 4:3 */
