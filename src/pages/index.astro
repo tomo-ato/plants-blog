@@ -1,13 +1,16 @@
 ---
 import SiteNav from '../components/SiteNav.astro';
-import { getCategory } from '../utils/categories';
+import { getCategory, TILLANDSIA_PARENTS } from '../utils/categories';
 
 const PROJECT_NAME = 'tomohirotsuji-plants';
 const response = await fetch(`https://scrapbox.io/api/pages/${PROJECT_NAME}`);
 const data = await response.json();
 
 const PLANT_GENERA = new Set(['tillandsia', 'oxalis', 'lepanthes', 'avonia', 'article']);
-const pages = data.pages.filter((p) => PLANT_GENERA.has(getCategory(p.title).genus));
+const PARENT_TITLES = new Set(TILLANDSIA_PARENTS.map((p) => p.title));
+const pages = data.pages.filter((p) =>
+  PLANT_GENERA.has(getCategory(p.title).genus) && !PARENT_TITLES.has(p.title)
+);
 ---
 
 <html lang="ja">
