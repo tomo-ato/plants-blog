@@ -3,12 +3,62 @@ import { KNOWN_TAGS } from './tags.js';
 
 const R2_BASE_URL = 'https://pub-914d924a13a1433c85c0aedcd204e1ff.r2.dev/webp';
 
-function convertToR2Url(originalUrl) {
+export function convertToR2Url(originalUrl) {
   const match = originalUrl.match(/https:\/\/scrapbox\.io\/files\/([a-f0-9]+)\.[a-z]+/i);
   if (match) {
     return `${R2_BASE_URL}/${match[1]}.webp`;
   }
   return originalUrl;
+}
+
+/**
+ * 行がタグのみで構成されているか判定してタグ一覧を返す。
+ * タグでない要素が含まれる場合は null を返す。
+ */
+function parseTagOnlyLine(text) {
+  let remaining = text.trim();
+  if (!remaining) return null;
+  const lineTags = [];
+  remaining = remaining.replace(/\[([^\]]+)\]/g, (match, content) => {
+    if (KNOWN_TAGS.has(content)) { lineTags.push(content); return ''; }
+    return match;
+  });
+  remaining = remaining.replace(/(^|\s)#([^\s<#]+)/g, (_, _before, tag) => {
+    lineTags.push(tag); return '';
+  });
+  return remaining.trim() === '' ? lineTags : null;
+}
+
+/**
+ * 記事末尾のタグのみの行を抽出し、タグ一覧とそれを除いたコンテンツ行を返す。
+ * 途中に空行があってもスキップして末尾タグを収集する。
+ * @returns {{ tags: string[], contentLines: object[] }}
+ */
+export function extractTagsFromLines(lines) {
+  // 末尾から走査：空行はスキップ、タグのみ行は収集、本文行が来たら停止
+  let cutoff = lines.length;
+  for (let i = lines.length - 1; i >= 0; i--) {
+    const text = lines[i].text.trim();
+    if (!text) continue; // 空行は飛ばして継続
+    const lineTags = parseTagOnlyLine(text);
+    if (lineTags !== null) {
+      cutoff = i; // この行も末尾タグ領域に含める
+    } else {
+      break; // 本文行に当たったので停止
+    }
+  }
+
+  const seen = new Set();
+  const tags = [];
+  for (let i = cutoff; i < lines.length; i++) {
+    const lineTags = parseTagOnlyLine(lines[i].text.trim());
+    if (!lineTags) continue;
+    for (const tag of lineTags) {
+      if (!seen.has(tag)) { tags.push(tag); seen.add(tag); }
+    }
+  }
+
+  return { tags, contentLines: lines.slice(0, cutoff) };
 }
 
 export function parseScrapboxLine(text, titleToId = {}, titleToImage = {}) {

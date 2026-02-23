@@ -2,7 +2,7 @@
 const pathname = Astro.url.pathname;
 
 const navItems = [
-  { label: 'トップ', href: '/' },
+  { label: 'TOP', href: '/' },
   { label: 'Tillandsia', href: '/genus/tillandsia' },
   { label: 'Oxalis', href: '/genus/oxalis' },
   { label: 'Lepanthes', href: '/genus/lepanthes' },
@@ -19,28 +19,39 @@ function isActive(href: string): boolean {
 ---
 
 <nav class="site-nav">
-  <button class="hamburger" aria-label="メニューを開く" aria-expanded="false">
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
-  <ul class="nav-list">
-    {navItems.map((item) => (
-      <li>
-        <a href={item.href} class={isActive(item.href) ? 'active' : ''}>
-          {item.label}
-        </a>
-      </li>
-    ))}
-  </ul>
+  <div class="nav-inner">
+    <button class="hamburger" aria-label="メニューを開く" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <ul class="nav-list">
+      {navItems.map((item) => (
+        <li>
+          <a href={item.href} class={isActive(item.href) ? 'active' : ''}>
+            {item.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
 </nav>
 
 <style>
   /* ===== モバイルファースト（基本 = SP） ===== */
 
   .site-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #fff;
     border-bottom: 1px solid #e0e0e0;
     margin-bottom: 24px;
+  }
+  .nav-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
   }
 
   /* ハンバーガーボタン: SP では表示 */

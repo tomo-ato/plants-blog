@@ -3,8 +3,9 @@ import SiteNav from '../components/SiteNav.astro';
 
 interface Props {
   title: string;
+  maxWidth?: string;
 }
-const { title } = Astro.props;
+const { title, maxWidth = '800px' } = Astro.props;
 ---
 
 <html lang="ja">
@@ -18,20 +19,24 @@ const { title } = Astro.props;
   </head>
   <body>
     <SiteNav />
-    <slot />
+    <main class="page-content" style={`max-width: ${maxWidth};`}>
+      <slot />
+    </main>
   </body>
 </html>
 
 <style is:global>
   body {
     font-family: 'Noto Sans JP', sans-serif;
-    max-width: 800px;
+    line-height: 1.8;
+    margin: 0;
+  }
+  .page-content {
     margin: 0 auto;
     padding: 20px;
-    line-height: 1.8;
   }
   h1 {
-    border-bottom: 2px solid #333;
+    border-bottom: 2px solid #ccc;
     padding-bottom: 10px;
     margin-bottom: 30px;
   }
@@ -77,7 +82,7 @@ const { title } = Astro.props;
   }
   .content img {
     display: block;
-    max-width: 640px;
+    max-width: 800px;
     width: 100%;
     height: auto;
     margin: 20px auto;
@@ -85,7 +90,7 @@ const { title } = Astro.props;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   }
   .content figure {
-    max-width: 640px;
+    max-width: 800px;
     margin: 20px auto;
   }
   .content figure img {
