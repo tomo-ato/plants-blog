@@ -37,7 +37,7 @@ export const TILLANDSIA_PARENTS = [
 export function getCategory(title) {
   if (EXCLUDED_PAGES.has(title)) return { genus: null, parentTitle: null };
   if (title === 'Tomo_at') return { genus: 'about', parentTitle: null };
-  if (title === 'READ ME（目次ともいう）') return { genus: null, parentTitle: null };
+  if (title === 'READ ME') return { genus: null, parentTitle: null };
   if (title.startsWith('【memo】')) return { genus: 'article', parentTitle: null };
 
   // 【更新停止】などのステータスプレフィクスを除去してジャンル判定

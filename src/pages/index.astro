@@ -1,10 +1,13 @@
 ---
 import SiteNav from '../components/SiteNav.astro';
+import { getCategory } from '../utils/categories';
 
 const PROJECT_NAME = 'tomohirotsuji-plants';
 const response = await fetch(`https://scrapbox.io/api/pages/${PROJECT_NAME}`);
 const data = await response.json();
-const pages = data.pages;
+
+const PLANT_GENERA = new Set(['tillandsia', 'oxalis', 'lepanthes', 'avonia', 'article']);
+const pages = data.pages.filter((p) => PLANT_GENERA.has(getCategory(p.title).genus));
 ---
 
 <html lang="ja">

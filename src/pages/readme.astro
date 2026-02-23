@@ -3,10 +3,11 @@ import { parseScrapboxContent } from '../utils/scrapbox-parser';
 import SiteNav from '../components/SiteNav.astro';
 
 const PROJECT_NAME = 'tomohirotsuji-plants';
+const PAGE_TITLE = 'READ ME';
 
 const [listRes, pageRes] = await Promise.all([
   fetch(`https://scrapbox.io/api/pages/${PROJECT_NAME}`),
-  fetch(`https://scrapbox.io/api/pages/${PROJECT_NAME}/Tomo_at`),
+  fetch(`https://scrapbox.io/api/pages/${PROJECT_NAME}/${encodeURIComponent(PAGE_TITLE)}`),
 ]);
 const listData = await listRes.json();
 const pageData = await pageRes.json();
@@ -25,7 +26,7 @@ const parsedContent = pageData.lines
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <title>About Me - 植物管理ブログ</title>
+    <title>READ ME - 植物管理ブログ</title>
     <style>
       body {
         font-family: sans-serif;
@@ -104,9 +105,9 @@ const parsedContent = pageData.lines
     <nav class="breadcrumb">
       <a href="/">トップ</a>
       <span class="sep">›</span>
-      <span class="current">About Me</span>
+      <span class="current">READ ME</span>
     </nav>
-    <h1>{pageData.title || 'About Me'}</h1>
+    <h1>READ ME</h1>
     <div class="content">
       {parsedContent.map((item) => (
         <Fragment set:html={item.html} />
