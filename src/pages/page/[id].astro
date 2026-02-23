@@ -8,7 +8,7 @@ export async function getStaticPaths() {
   const response = await fetch(`https://scrapbox.io/api/pages/${PROJECT_NAME}`);
   const data = await response.json();
 
-  const titleToId = Object.fromEntries(data.pages.map((page) => [page.title, page.id.slice(0, 8)]));
+  const titleToId = Object.fromEntries(data.pages.map((page) => [page.title, page.id.slice(0, 12)]));
   const titleToImage = Object.fromEntries(
     data.pages.filter((page) => page.image).map((page) => [page.title, page.image])
   );
@@ -16,7 +16,7 @@ export async function getStaticPaths() {
   return data.pages
     .filter((page) => !EXCLUDED_PAGES.has(page.title))
     .map((page) => ({
-      params: { id: page.id.slice(0, 8) },
+      params: { id: page.id.slice(0, 12) },
       props: { title: page.title, titleToId, titleToImage },
     }));
 }

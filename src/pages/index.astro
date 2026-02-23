@@ -21,7 +21,7 @@ const PARENT_TITLES = new Set(TILLANDSIA_PARENTS.map((p) => p.title));
 const pages = data.pages
   .filter((p) => PLANT_GENERA.has(getCategory(p.title).genus) && !PARENT_TITLES.has(p.title))
   .map((p) => ({
-    id: p.id.slice(0, 8),
+    id: p.id.slice(0, 12),
     title: p.title,
     updated: p.updated,
     image: p.image ? convertToR2Url(p.image) : null,

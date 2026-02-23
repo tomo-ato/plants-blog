@@ -18,7 +18,7 @@ const articles = data.pages
   <h1>Article</h1>
   <ul>
     {articles.map((p) => (
-      <li><a href={`/page/${p.id.slice(0, 8)}`}>{p.title.replace(/^【memo】\s*/, '')}</a></li>
+      <li><a href={`/page/${p.id.slice(0, 12)}`}>{p.title.replace(/^【memo】\s*/, '')}</a></li>
     ))}
   </ul>
 </Layout>
