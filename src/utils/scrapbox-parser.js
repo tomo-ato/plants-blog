@@ -24,8 +24,8 @@ export function parseScrapboxLine(text, titleToId = {}, titleToImage = {}) {
     return { type: 'heading', html: `<h${Math.min(level + 1, 6)}>${headingMatch[1]}</h${Math.min(level + 1, 6)}>` };
   }
 
-  // 画像 [https://...画像URL]
-  const imageMatch = text.match(/\[?(https:\/\/[^\s\]]+\.(?:png|jpg|jpeg|gif|webp))\]?/i);
+  // 画像 [https://...画像URL] ※行全体が画像URLの場合のみブロック画像扱い
+  const imageMatch = text.trim().match(/^\[?(https:\/\/[^\s\]]+\.(?:png|jpg|jpeg|gif|webp))\]?$/i);
   if (imageMatch) {
     const imgSrc = convertToR2Url(imageMatch[1]);
     return { type: 'image', html: `<img src="${imgSrc}" alt="画像" />` };
@@ -50,6 +50,10 @@ function parseInlineElements(text, titleToId = {}, titleToImage = {}) {
   text = text.replace(/\[([^\]]+?)\]/g, (match, content) => {
     // URLの場合
     if (content.startsWith('http')) {
+      // 画像URLはインラインアイコンとして表示
+      if (/\.(png|jpg|jpeg|gif|webp)$/i.test(content)) {
+        return `<img src="${convertToR2Url(content)}" class="scrapbox-icon" alt="画像" />`;
+      }
       return `<a href="${content}" target="_blank" rel="noopener">${content}</a>`;
     }
     // アイコン記法 [XXX.icon] or [XXX.icon*N]
