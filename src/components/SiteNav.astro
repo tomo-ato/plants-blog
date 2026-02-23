@@ -18,6 +18,10 @@ function isActive(href: string): boolean {
 }
 ---
 
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet" />
+
 <nav class="site-nav">
   <button class="hamburger" aria-label="メニューを開く" aria-expanded="false">
     <span></span>
@@ -36,9 +40,8 @@ function isActive(href: string): boolean {
 </nav>
 
 <style is:global>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
   body {
-    font-family: 'Noto Sans JP', sans-serif;
+    font-family: 'Noto Sans JP', sans-serif !important;
   }
 </style>
 
