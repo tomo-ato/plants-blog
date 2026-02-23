@@ -1,6 +1,6 @@
 ---
 import { getCategory, TILLANDSIA_PARENTS, EXCLUDED_PAGES } from '../../utils/categories.js';
-import SiteNav from '../../components/SiteNav.astro';
+import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
   const PROJECT_NAME = 'tomohirotsuji-plants';
@@ -51,108 +51,75 @@ const sortedPages =
     : [];
 ---
 
-<html lang="ja">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>{genusLabel} - Tomo at plants.</title>
-    <style>
-      body {
-        font-family: 'Noto Sans JP', sans-serif;
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-        line-height: 1.8;
-      }
-      nav.breadcrumb {
-        font-size: 0.85em;
-        color: #999;
-        margin-bottom: 20px;
-      }
-      nav.breadcrumb a {
-        color: #0066cc;
-        text-decoration: none;
-      }
-      nav.breadcrumb a:hover {
-        text-decoration: underline;
-      }
-      nav.breadcrumb .sep {
-        margin: 0 6px;
-        color: #ccc;
-      }
-      h1 {
-        border-bottom: 2px solid #333;
-        padding-bottom: 10px;
-        margin-bottom: 30px;
-      }
-      section {
-        margin-bottom: 30px;
-      }
-      h2 {
-        font-size: 1.05em;
-        margin-bottom: 6px;
-        padding-bottom: 4px;
-        border-bottom: 1px solid #ddd;
-      }
-      h2 a {
-        color: #333;
-        text-decoration: none;
-      }
-      h2 a:hover {
-        text-decoration: underline;
-      }
-      ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-      }
-      li {
-        border-bottom: 1px solid #eee;
-        padding: 8px 0;
-      }
-      li.child {
-        padding-left: 20px;
-      }
-      li a {
-        color: #0066cc;
-        text-decoration: none;
-      }
-      li a:hover {
-        text-decoration: underline;
-      }
-    </style>
-  </head>
-  <body>
-    <SiteNav />
-    <nav class="breadcrumb">
-      <a href="/">トップ</a>
-      <span class="sep">›</span>
-      <span>{genusLabel}</span>
-    </nav>
-    <h1>{genusLabel}</h1>
+<Layout title={`${genusLabel} - Tomo at plants.`}>
+  <nav class="breadcrumb">
+    <a href="/">トップ</a>
+    <span class="sep">›</span>
+    <span>{genusLabel}</span>
+  </nav>
+  <h1>{genusLabel}</h1>
 
-    {genus === 'tillandsia' && groups.map((group) => (
-      <section>
-        <h2>
-          {group.parent
-            ? <a href={`/page/${group.parent.id}`}>{group.parent.title}</a>
-            : <span>その他</span>
-          }
-        </h2>
-        <ul>
-          {group.children.map((p) => (
-            <li class="child"><a href={`/page/${p.id}`}>{p.title}</a></li>
-          ))}
-        </ul>
-      </section>
-    ))}
-
-    {genus !== 'tillandsia' && (
+  {genus === 'tillandsia' && groups.map((group) => (
+    <section>
+      <h2>
+        {group.parent
+          ? <a href={`/page/${group.parent.id}`}>{group.parent.title}</a>
+          : <span>その他</span>
+        }
+      </h2>
       <ul>
-        {sortedPages.map((p) => (
-          <li><a href={`/page/${p.id}`}>{p.title}</a></li>
+        {group.children.map((p) => (
+          <li class="child"><a href={`/page/${p.id}`}>{p.title}</a></li>
         ))}
       </ul>
-    )}
-  </body>
-</html>
+    </section>
+  ))}
+
+  {genus !== 'tillandsia' && (
+    <ul>
+      {sortedPages.map((p) => (
+        <li><a href={`/page/${p.id}`}>{p.title}</a></li>
+      ))}
+    </ul>
+  )}
+</Layout>
+
+<style>
+  section {
+    margin-bottom: 30px;
+  }
+  h2 {
+    font-size: 1.05em;
+    margin-top: 0;
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #ddd;
+    color: inherit;
+  }
+  h2 a {
+    color: #333;
+    text-decoration: none;
+  }
+  h2 a:hover {
+    text-decoration: underline;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  li {
+    border-bottom: 1px solid #eee;
+    padding: 8px 0;
+  }
+  li.child {
+    padding-left: 20px;
+  }
+  li a {
+    color: #0066cc;
+    text-decoration: none;
+  }
+  li a:hover {
+    text-decoration: underline;
+  }
+</style>

@@ -1,7 +1,7 @@
 ---
 import { parseScrapboxContent } from '../../utils/scrapbox-parser';
 import { getBreadcrumbs, EXCLUDED_PAGES } from '../../utils/categories';
-import SiteNav from '../../components/SiteNav.astro';
+import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
   const PROJECT_NAME = 'tomohirotsuji-plants';
@@ -28,173 +28,37 @@ const PROJECT_NAME = 'tomohirotsuji-plants';
 const response = await fetch(`https://scrapbox.io/api/pages/${PROJECT_NAME}/${encodeURIComponent(title)}`);
 const pageData = await response.json();
 
-// Scrapbox記法を解釈
-// lines[0] はタイトル行なのでスキップ
 const parsedContent = pageData.lines ? parseScrapboxContent(pageData.lines.slice(1), titleToId, titleToImage) : [];
 
 const breadcrumbs = getBreadcrumbs(title, titleToId);
 ---
 
-<html lang="ja">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>{pageData.title || 'Tomo at plants.'} - Tomo at plants.</title>
-    <style>
-      body {
-        font-family: 'Noto Sans JP', sans-serif;
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-        line-height: 1.8;
-      }
-      .back-link {
-        display: inline-block;
-        margin-bottom: 20px;
-        color: #0066cc;
-        text-decoration: none;
-      }
-      nav.breadcrumb {
-        font-size: 0.85em;
-        color: #999;
-        margin-bottom: 20px;
-        flex-wrap: wrap;
-        display: flex;
-        align-items: center;
-        gap: 2px;
-      }
-      nav.breadcrumb a {
-        color: #0066cc;
-        text-decoration: none;
-      }
-      nav.breadcrumb a:hover {
-        text-decoration: underline;
-      }
-      nav.breadcrumb .sep {
-        margin: 0 4px;
-        color: #ccc;
-      }
-      nav.breadcrumb .current {
-        color: #666;
-      }
-      h1 {
-        border-bottom: 2px solid #333;
-        padding-bottom: 10px;
-        margin-bottom: 30px;
-      }
-      h2, h3, h4 {
-        margin-top: 30px;
-        margin-bottom: 15px;
-        color: #333;
-      }
-      .content {
-        margin-bottom: 40px;
-      }
-      .content :global(p) {
-        margin: 10px 0;
-      }
-      .content :global(img) {
-        display: block;
-        max-width: 640px;
-        width: 100%;
-        height: auto;
-        margin: 20px auto;
-        border-radius: 5px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      }
-      .content :global(figure) {
-        max-width: 640px;
-        margin: 20px auto;
-      }
-      .content :global(figure img) {
-        margin: 0;
-        width: 100%;
-      }
-      .content :global(figcaption) {
-        font-size: 0.82em;
-        color: #999;
-        margin-top: 6px;
-        text-align: left;
-      }
-      .content :global(figcaption a) {
-        color: #0066cc;
-        text-decoration: underline;
-        background: none;
-        padding: 0;
-      }
-      .content :global(img.scrapbox-icon) {
-        height: 1.3em;
-        width: auto;
-        max-width: none;
-        margin: 0 2px;
-        border-radius: 0;
-        box-shadow: none;
-        display: inline;
-        vertical-align: middle;
-        position: relative;
-        top: -0.1em;
-      }
-      .content :global(li) {
-        list-style: none;
-        padding: 5px 0;
-      }
-      .content :global(a) {
-        color: #0066cc;
-        text-decoration: none;
-      }
-      .content :global(a:hover) {
-        text-decoration: underline;
-      }
-      .content :global(.internal-link) {
-        color: #0066cc;
-        background: #f0f8ff;
-        padding: 2px 6px;
-        border-radius: 3px;
-      }
-      .content :global(.tag) {
-        color: #666;
-        background: #f5f5f5;
-        padding: 2px 8px;
-        border-radius: 3px;
-        font-size: 0.9em;
-      }
-      .meta {
-        color: #666;
-        margin-top: 30px;
-        padding-top: 20px;
-        border-top: 1px solid #ddd;
-        font-size: 0.9em;
-      }
-    </style>
-  </head>
-  <body>
-    <SiteNav />
-    {breadcrumbs.length > 0 ? (
-      <nav class="breadcrumb">
-        {breadcrumbs.map((crumb, i) => (
-          <>
-            {i > 0 && <span class="sep">›</span>}
-            {crumb.href
-              ? <a href={crumb.href}>{crumb.label}</a>
-              : <span class="current">{crumb.label}</span>
-            }
-          </>
-        ))}
-      </nav>
-    ) : (
-      <a href="/" class="back-link">← 一覧に戻る</a>
-    )}
-    <h1>{pageData.title}</h1>
-    <div class="content">
-      {parsedContent.map((item) => (
-        <Fragment set:html={item.html} />
+<Layout title={`${pageData.title || 'Tomo at plants.'} - Tomo at plants.`}>
+  {breadcrumbs.length > 0 ? (
+    <nav class="breadcrumb">
+      {breadcrumbs.map((crumb, i) => (
+        <>
+          {i > 0 && <span class="sep">›</span>}
+          {crumb.href
+            ? <a href={crumb.href}>{crumb.label}</a>
+            : <span class="current">{crumb.label}</span>
+          }
+        </>
       ))}
+    </nav>
+  ) : (
+    <a href="/" class="back-link">← 一覧に戻る</a>
+  )}
+  <h1>{pageData.title}</h1>
+  <div class="content">
+    {parsedContent.map((item) => (
+      <Fragment set:html={item.html} />
+    ))}
+  </div>
+  {pageData.created && (
+    <div class="meta">
+      <p>作成日: {new Date(pageData.created * 1000).toLocaleDateString('ja-JP')}</p>
+      <p>更新日: {new Date(pageData.updated * 1000).toLocaleDateString('ja-JP')}</p>
     </div>
-    {pageData.created && (
-      <div class="meta">
-        <p>作成日: {new Date(pageData.created * 1000).toLocaleDateString('ja-JP')}</p>
-        <p>更新日: {new Date(pageData.updated * 1000).toLocaleDateString('ja-JP')}</p>
-      </div>
-    )}
-  </body>
-</html>
+  )}
+</Layout>
