@@ -65,7 +65,7 @@ async function main() {
 
     for (const tag of tagsInPage) {
       if (!tagIndex[tag]) tagIndex[tag] = [];
-      tagIndex[tag].push({ id: page.id, title: page.title });
+      tagIndex[tag].push({ id: page.id.slice(0, 8), title: page.title });
     }
   }
 

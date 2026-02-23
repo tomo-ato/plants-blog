@@ -63,13 +63,13 @@ const sortedPages =
     <section>
       <h2>
         {group.parent
-          ? <a href={`/page/${group.parent.id}`}>{group.parent.title}</a>
+          ? <a href={`/page/${group.parent.id.slice(0, 8)}`}>{group.parent.title}</a>
           : <span>その他</span>
         }
       </h2>
       <ul>
         {group.children.map((p) => (
-          <li class="child"><a href={`/page/${p.id}`}>{p.title}</a></li>
+          <li class="child"><a href={`/page/${p.id.slice(0, 8)}`}>{p.title}</a></li>
         ))}
       </ul>
     </section>
@@ -78,7 +78,7 @@ const sortedPages =
   {genus !== 'tillandsia' && (
     <ul>
       {sortedPages.map((p) => (
-        <li><a href={`/page/${p.id}`}>{p.title}</a></li>
+        <li><a href={`/page/${p.id.slice(0, 8)}`}>{p.title}</a></li>
       ))}
     </ul>
   )}
