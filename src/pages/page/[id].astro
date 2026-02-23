@@ -1,6 +1,7 @@
 ---
 import { parseScrapboxContent } from '../../utils/scrapbox-parser';
 import { getBreadcrumbs, EXCLUDED_PAGES } from '../../utils/categories';
+import SiteNav from '../../components/SiteNav.astro';
 
 export async function getStaticPaths() {
   const PROJECT_NAME = 'tomohirotsuji-plants';
@@ -167,6 +168,7 @@ const breadcrumbs = getBreadcrumbs(title, titleToId);
     </style>
   </head>
   <body>
+    <SiteNav />
     {breadcrumbs.length > 0 ? (
       <nav class="breadcrumb">
         {breadcrumbs.map((crumb, i) => (
