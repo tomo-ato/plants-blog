@@ -72,7 +72,7 @@ export function getCategory(title) {
  */
 export function getBreadcrumbs(title, titleToId) {
   const { genus, parentTitle } = getCategory(title);
-  const top = { label: 'トップ', href: '/' };
+  const top = { label: 'TOP', href: '/' };
 
   if (!genus) return [];
   if (genus === 'about') return [top, { label: 'About', href: null }];
