@@ -2,9 +2,8 @@
 import { getCategory, TILLANDSIA_PARENTS, EXCLUDED_PAGES } from '../../utils/categories.js';
 import SiteNav from '../../components/SiteNav.astro';
 
-const PROJECT_NAME = 'tomohirotsuji-plants';
-
 export async function getStaticPaths() {
+  const PROJECT_NAME = 'tomohirotsuji-plants';
   const response = await fetch(`https://scrapbox.io/api/pages/${PROJECT_NAME}`);
   const data = await response.json();
   const allPages = data.pages.filter((p) => !EXCLUDED_PAGES.has(p.title));
