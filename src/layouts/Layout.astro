@@ -4,8 +4,16 @@ import SiteNav from '../components/SiteNav.astro';
 interface Props {
   title: string;
   maxWidth?: string;
+  description?: string;
+  ogImage?: string;
 }
-const { title, maxWidth = '800px' } = Astro.props;
+const {
+  title,
+  maxWidth = '800px',
+  description = 'チランジア・オキザリスなど植物の育成記録ブログ',
+  ogImage = 'https://tomo-at-plants.com/favicon.webp',
+} = Astro.props;
+const canonicalUrl = Astro.url.href;
 ---
 
 <html lang="ja">
@@ -13,6 +21,15 @@ const { title, maxWidth = '800px' } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Tomo at plants." />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" type="image/webp" href="/favicon.webp" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.webp" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />

@@ -1,5 +1,5 @@
 ---
-import { parseScrapboxContent, extractTagsFromLines } from '../../utils/scrapbox-parser';
+import { parseScrapboxContent, extractTagsFromLines, convertToR2Url } from '../../utils/scrapbox-parser';
 import { getBreadcrumbs, getCategory, EXCLUDED_PAGES } from '../../utils/categories';
 import Layout from '../../layouts/Layout.astro';
 
@@ -43,9 +43,13 @@ const GENUS_LABELS: Record<string, string> = {
 };
 const { genus } = getCategory(title);
 const categoryLabel = genus ? (GENUS_LABELS[genus] ?? null) : null;
+const ogImage = pageData.image ? convertToR2Url(pageData.image) : undefined;
 ---
 
-<Layout title={`${pageData.title || 'Tomo at plants.'} - Tomo at plants.`}>
+<Layout
+  title={`${pageData.title || 'Tomo at plants.'} - Tomo at plants.`}
+  ogImage={ogImage}
+>
   {breadcrumbs.length > 0 ? (
     <nav class="breadcrumb">
       {breadcrumbs.map((crumb, i) => (

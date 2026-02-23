@@ -4,6 +4,6 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://plants-blog.pages.dev',
+  site: 'https://tomo-at-plants.com',
   integrations: [sitemap()],
 });
