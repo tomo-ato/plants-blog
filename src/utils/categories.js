@@ -77,7 +77,8 @@ export function getBreadcrumbs(title, titleToId) {
   if (!genus) return [];
   if (genus === 'about') return [top, { label: 'About', href: null }];
   if (genus === 'article') {
-    return [top, { label: 'Article', href: '/article' }, { label: title, href: null }];
+    const displayTitle = title.replace(/^【memo】\s*/, '');
+    return [top, { label: 'Article', href: '/article' }, { label: displayTitle, href: null }];
   }
 
   const labels = {

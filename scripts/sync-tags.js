@@ -48,7 +48,7 @@ async function main() {
 
       // #tag を抽出（URLや「C#」などは除外）
       for (const m of text.matchAll(/(^|\s)#([^\s<#\]\[]+)/g)) {
-        tagsInPage.add(m[2]);
+        tagsInPage.add(m[2].toLowerCase());
       }
 
       // 疎通していない [link] を抽出
@@ -59,7 +59,7 @@ async function main() {
         if (/^[\/\-\+\~](\s|$)/.test(inner)) continue;  // 装飾記法
         if (/^.+\.icon(\*\d+)?$/.test(inner)) continue;  // アイコン
         if (titleSet.has(inner)) continue;                // 存在するページ
-        tagsInPage.add(inner);
+        tagsInPage.add(inner.toLowerCase());
       }
     }
 

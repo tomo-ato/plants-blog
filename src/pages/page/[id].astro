@@ -44,10 +44,11 @@ const GENUS_LABELS: Record<string, string> = {
 const { genus } = getCategory(title);
 const categoryLabel = genus ? (GENUS_LABELS[genus] ?? null) : null;
 const ogImage = pageData.image ? convertToR2Url(pageData.image) : undefined;
+const displayTitle = (pageData.title || '').replace(/^【memo】\s*/, '') || 'Tomo at plants.';
 ---
 
 <Layout
-  title={`${pageData.title || 'Tomo at plants.'} - Tomo at plants.`}
+  title={`${displayTitle} - Tomo at plants.`}
   ogImage={ogImage}
 >
   {breadcrumbs.length > 0 ? (
@@ -65,7 +66,7 @@ const ogImage = pageData.image ? convertToR2Url(pageData.image) : undefined;
   ) : (
     <a href="/" class="back-link">← 一覧に戻る</a>
   )}
-  <h1>{pageData.title}</h1>
+  <h1>{displayTitle}</h1>
   <div class="page-title-meta">
     <div class="meta-row">
       {categoryLabel && (

@@ -81,6 +81,13 @@ export function parseScrapboxLine(text, titleToId = {}, titleToImage = {}) {
     return { type: 'image', html: `<img src="${imgSrc}" alt="画像" />` };
   }
 
+  // 引用 > テキスト
+  if (text.trimStart().startsWith('> ') || text.trimStart() === '>') {
+    const quoteText = text.trimStart().replace(/^>\s?/, '');
+    const parsed = parseInlineElements(quoteText, titleToId, titleToImage);
+    return { type: 'quote', html: `<blockquote>${parsed}</blockquote>` };
+  }
+
   // インデント（リスト）
   const indentLevel = (text.match(/^\t+/) || [''])[0].length;
   if (indentLevel > 0) {
@@ -97,7 +104,7 @@ export function parseScrapboxLine(text, titleToId = {}, titleToImage = {}) {
 // インライン要素の解釈（リンク、タグなど）
 function parseInlineElements(text, titleToId = {}, titleToImage = {}) {
   // [リンク]記法を処理
-  text = text.replace(/\[([^\]]+?)\]/g, (match, content) => {
+  text = text.replace(/\[([^\]]+?)\]/g, (_match, content) => {
     // URLの場合
     if (content.startsWith('http')) {
       // 画像URLはインラインアイコンとして表示
@@ -117,15 +124,15 @@ function parseInlineElements(text, titleToId = {}, titleToImage = {}) {
     }
     // KNOWN_TAGSに含まれる場合は明示的にタグ扱い（#付きで表示）
     const safeContent = content.replace(/#/g, '&#35;');
-    if (KNOWN_TAGS.has(content)) {
-      return `<a href="/tag?q=${encodeURIComponent(content)}" class="tag">#${safeContent}</a>`;
+    if (KNOWN_TAGS.has(content.toLowerCase())) {
+      return `<a href="/tag?q=${encodeURIComponent(content.toLowerCase())}" class="tag">#${safeContent}</a>`;
     }
     // 内部リンク：タイトル→IDで解決。存在しないページは#付きタグ扱い
     const pageId = titleToId[content];
     if (pageId) {
       return `<a href="/page/${pageId}" class="internal-link">${safeContent}</a>`;
     }
-    return `<a href="/tag?q=${encodeURIComponent(content)}" class="tag">#${safeContent}</a>`;
+    return `<a href="/tag?q=${encodeURIComponent(content.toLowerCase())}" class="tag">#${safeContent}</a>`;
   });
 
   // 通常のURLを処理（HTML属性内のURLは対象外、#タグより先に処理）
