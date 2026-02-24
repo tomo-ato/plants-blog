@@ -82,7 +82,7 @@ export function parseScrapboxLine(text, titleToId = {}, titleToImage = {}) {
   }
 
   // 引用 > テキスト
-  if (text.trimStart().startsWith('> ') || text.trimStart() === '>') {
+  if (text.trimStart().startsWith('>')) {
     const quoteText = text.trimStart().replace(/^>\s?/, '');
     const parsed = parseInlineElements(quoteText, titleToId, titleToImage);
     return { type: 'quote', html: `<blockquote>${parsed}</blockquote>` };
@@ -151,8 +151,16 @@ export function parseScrapboxContent(lines, titleToId = {}, titleToImage = {}) {
   for (const line of lines) {
     const item = parseScrapboxLine(line.text, titleToId, titleToImage);
 
+    // 直前も引用行 → 同じ blockquote にまとめる
+    if (item.type === 'quote' && items.length > 0 && items[items.length - 1].type === 'quote') {
+      const prev = items.pop();
+      const prevInner = prev.html.replace(/^<blockquote>/, '').replace(/<\/blockquote>$/, '');
+      const currInner = item.html.replace(/^<blockquote>/, '').replace(/<\/blockquote>$/, '');
+      items.push({ type: 'quote', html: `<blockquote>${prevInner}<br>${currInner}</blockquote>` });
+    }
+
     // 直前が画像でテキスト行 → figure + figcaption にまとめる
-    if (
+    else if (
       item.type === 'text' &&
       items.length > 0 &&
       items[items.length - 1].type === 'image'
