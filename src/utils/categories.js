@@ -1,5 +1,16 @@
 // ページタイトルからカテゴリ・パンくず情報を返すユーティリティ
 
+export const PROJECT_NAME = 'tomohirotsuji-plants';
+
+/** @type {Record<string, string>} */
+export const GENUS_LABELS = {
+  tillandsia: 'Tillandsia',
+  oxalis: 'Oxalis',
+  lepanthes: 'Lepanthes',
+  avonia: 'Avonia',
+  article: 'Article',
+};
+
 // ビルド時にページ生成をスキップするタイトル
 export const EXCLUDED_PAGES = new Set([
   'Cosenseの使い方',

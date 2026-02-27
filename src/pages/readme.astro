@@ -1,8 +1,7 @@
 ---
 import { parseScrapboxContent } from '../utils/scrapbox-parser';
+import { PROJECT_NAME } from '../utils/categories.js';
 import Layout from '../layouts/Layout.astro';
-
-const PROJECT_NAME = 'tomohirotsuji-plants';
 const PAGE_TITLE = 'READ ME';
 
 const [listRes, pageRes] = await Promise.all([
@@ -23,7 +22,7 @@ const parsedContent = pageData.lines
 ---
 
 <Layout title="READ ME - Tomo at plants.">
-  <nav class="breadcrumb">
+  <nav class="breadcrumb" aria-label="パンくずリスト">
     <a href="/">TOP</a>
     <span class="sep">›</span>
     <span class="current">READ ME</span>

@@ -37,8 +37,9 @@ const canonicalUrl = Astro.url.href;
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet" />
   </head>
   <body>
+    <a href="#main-content" class="skip-link">メインコンテンツへスキップ</a>
     <SiteNav />
-    <main class="page-content" style={`max-width: ${maxWidth};`}>
+    <main id="main-content" class="page-content" style={`max-width: ${maxWidth};`}>
       <slot />
     </main>
   </body>
@@ -49,6 +50,19 @@ const canonicalUrl = Astro.url.href;
     font-family: 'Noto Sans JP', sans-serif;
     line-height: 1.8;
     margin: 0;
+  }
+  .skip-link {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    background: #0066cc;
+    color: #fff;
+    padding: 8px 16px;
+    z-index: 9999;
+    text-decoration: none;
+  }
+  .skip-link:focus {
+    top: 0;
   }
   .page-content {
     margin: 0 auto;
@@ -172,6 +186,11 @@ const canonicalUrl = Astro.url.href;
     border-radius: 3px;
     font-size: 0.9em;
   }
+  .cat-tillandsia { background: #e6f4ea; color: #2d7a47; }
+  .cat-oxalis     { background: #f2e8fb; color: #7b33c0; }
+  .cat-lepanthes  { background: #fff3e0; color: #c86000; }
+  .cat-avonia     { background: #fde8ec; color: #c0294a; }
+  .cat-article    { background: #e3f0fd; color: #1a5fad; }
   .meta {
     color: #666;
     margin-top: 30px;

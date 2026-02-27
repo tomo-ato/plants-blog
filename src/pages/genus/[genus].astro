@@ -1,9 +1,8 @@
 ---
-import { getCategory, TILLANDSIA_PARENTS, EXCLUDED_PAGES } from '../../utils/categories.js';
+import { getCategory, TILLANDSIA_PARENTS, EXCLUDED_PAGES, PROJECT_NAME, GENUS_LABELS } from '../../utils/categories.js';
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
-  const PROJECT_NAME = 'tomohirotsuji-plants';
   const response = await fetch(`https://scrapbox.io/api/pages/${PROJECT_NAME}`);
   const data = await response.json();
   const allPages = data.pages.filter((p) => !EXCLUDED_PAGES.has(p.title));
@@ -18,13 +17,7 @@ export async function getStaticPaths() {
 const { genus } = Astro.params;
 const { pages } = Astro.props;
 
-const genusLabels = {
-  tillandsia: 'Tillandsia',
-  oxalis: 'Oxalis',
-  lepanthes: 'Lepanthes',
-  avonia: 'Avonia',
-};
-const genusLabel = genusLabels[genus] || genus;
+const genusLabel = GENUS_LABELS[genus] || genus;
 
 // Tillandsia: 親種ごとにグループ化
 const groups = [];

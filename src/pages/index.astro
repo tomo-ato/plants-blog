@@ -1,19 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { getCategory, TILLANDSIA_PARENTS } from '../utils/categories';
+import { getCategory, TILLANDSIA_PARENTS, PROJECT_NAME, GENUS_LABELS } from '../utils/categories';
 import { convertToR2Url } from '../utils/scrapbox-parser';
 
-const PROJECT_NAME = 'tomohirotsuji-plants';
 const response = await fetch(`https://scrapbox.io/api/pages/${PROJECT_NAME}`);
 const data = await response.json();
-
-const GENUS_LABELS: Record<string, string> = {
-  tillandsia: 'Tillandsia',
-  oxalis: 'Oxalis',
-  lepanthes: 'Lepanthes',
-  avonia: 'Avonia',
-  article: 'Article',
-};
 
 const PLANT_GENERA = new Set(Object.keys(GENUS_LABELS));
 const PARENT_TITLES = new Set(TILLANDSIA_PARENTS.map((p) => p.title));
@@ -146,12 +137,6 @@ const pages = data.pages
     font-weight: 700;
     letter-spacing: 0.03em;
   }
-  .cat-tillandsia { background: #e6f4ea; color: #2d7a47; }
-  .cat-oxalis     { background: #f2e8fb; color: #7b33c0; }
-  .cat-lepanthes  { background: #fff3e0; color: #c86000; }
-  .cat-avonia     { background: #fde8ec; color: #c0294a; }
-  .cat-article    { background: #e3f0fd; color: #1a5fad; }
-
   /* タイトル */
   .card-title {
     font-size: 0.9em;

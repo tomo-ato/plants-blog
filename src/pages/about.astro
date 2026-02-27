@@ -1,8 +1,7 @@
 ---
 import { parseScrapboxContent } from '../utils/scrapbox-parser';
+import { PROJECT_NAME } from '../utils/categories.js';
 import Layout from '../layouts/Layout.astro';
-
-const PROJECT_NAME = 'tomohirotsuji-plants';
 
 const [listRes, pageRes] = await Promise.all([
   fetch(`https://scrapbox.io/api/pages/${PROJECT_NAME}`),
