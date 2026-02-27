@@ -52,7 +52,7 @@ const displayTitle = (pageData.title || '').replace(/^【memo】\s*/, '') || 'To
   ogImage={ogImage}
 >
   {breadcrumbs.length > 0 ? (
-    <nav class="breadcrumb">
+    <nav class="breadcrumb" aria-label="パンくずリスト">
       {breadcrumbs.map((crumb, i) => (
         <>
           {i > 0 && <span class="sep">›</span>}
@@ -135,7 +135,7 @@ const displayTitle = (pageData.title || '').replace(/^【memo】\s*/, '') || 'To
   .cat-article    { background: #e3f0fd; color: #1a5fad; }
   .meta-date {
     font-size: 0.78em;
-    color: #999;
+    color: #767676;
   }
   .tag-chip {
     background: #f5f5f5;
