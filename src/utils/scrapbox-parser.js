@@ -88,12 +88,21 @@ export function parseScrapboxLine(text, titleToId = {}, titleToImage = {}) {
     return { type: 'quote', html: `<blockquote>${parsed}</blockquote>` };
   }
 
-  // インデント（リスト）
-  const indentLevel = (text.match(/^\t+/) || [''])[0].length;
+  // インデント（リスト）- タブまたはスペース
+  const indentMatch = text.match(/^[\t ]+/);
+  const indentLevel = indentMatch ? indentMatch[0].length : 0;
   if (indentLevel > 0) {
     const content = text.substring(indentLevel);
     const parsed = parseInlineElements(content, titleToId, titleToImage);
     return { type: 'list', level: indentLevel, html: `<li style="margin-left: ${indentLevel * 20}px">${parsed}</li>` };
+  }
+
+  // 定義リスト（key：value）パターン - 全角コロン区切り、キーは10文字以内
+  const defMatch = text.match(/^([^：]{1,10})：(.+)$/);
+  if (defMatch) {
+    const key = parseInlineElements(defMatch[1], titleToId, titleToImage);
+    const value = parseInlineElements(defMatch[2], titleToId, titleToImage);
+    return { type: 'defitem', html: `<dt>${key}</dt><dd>${value}</dd>` };
   }
 
   // 通常のテキスト
@@ -171,7 +180,31 @@ export function parseScrapboxContent(lines, titleToId = {}, titleToImage = {}) {
         type: 'figure',
         html: `<figure>${prev.html}<figcaption>${captionHtml}</figcaption></figure>`,
       });
-    } else {
+    }
+
+    // リスト行 → <ul> にまとめる
+    else if (item.type === 'list') {
+      if (items.length > 0 && items[items.length - 1].type === 'list') {
+        const prev = items.pop();
+        const prevInner = prev.html.replace(/^<ul>/, '').replace(/<\/ul>$/, '');
+        items.push({ type: 'list', html: `<ul>${prevInner}${item.html}</ul>` });
+      } else {
+        items.push({ type: 'list', html: `<ul>${item.html}</ul>` });
+      }
+    }
+
+    // 定義リスト行 → <dl> にまとめる
+    else if (item.type === 'defitem') {
+      if (items.length > 0 && items[items.length - 1].type === 'defitem') {
+        const prev = items.pop();
+        const prevInner = prev.html.replace(/^<dl>/, '').replace(/<\/dl>$/, '');
+        items.push({ type: 'defitem', html: `<dl>${prevInner}${item.html}</dl>` });
+      } else {
+        items.push({ type: 'defitem', html: `<dl>${item.html}</dl>` });
+      }
+    }
+
+    else {
       items.push(item);
     }
   }

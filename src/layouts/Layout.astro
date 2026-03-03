@@ -154,9 +154,32 @@ const canonicalUrl = Astro.url.href;
     position: relative;
     top: -0.1em;
   }
+  .content ul {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0;
+  }
   .content li {
     list-style: none;
     padding: 5px 0;
+  }
+  .content dl {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 2px 0;
+    margin: 10px 0;
+    font-size: 0.9em;
+  }
+  .content dt {
+    color: #555;
+    padding-right: 2px;
+    white-space: nowrap;
+  }
+  .content dt::after {
+    content: '：';
+  }
+  .content dd {
+    margin: 0;
   }
   .content blockquote {
     border-left: 3px solid #ccc;
