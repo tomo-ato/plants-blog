@@ -5,7 +5,7 @@ import Layout from '../../layouts/Layout.astro';
 <Layout title="タグ検索 - Tomo at plants.">
   <a href="/" class="back-link">← 一覧に戻る</a>
   <h1 id="tag-heading">タグ検索</h1>
-  <div id="status">読み込み中...</div>
+  <p id="status" role="status" aria-live="polite">読み込み中...</p>
   <ul class="page-list" id="page-list"></ul>
 
   <script>

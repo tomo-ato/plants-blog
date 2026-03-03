@@ -39,7 +39,9 @@ const pages = data.pages
             </span>
             <p class="card-title">{page.title}</p>
             <p class="card-date">
-              {new Date(page.updated * 1000).toLocaleDateString('ja-JP')}
+              <time datetime={new Date(page.updated * 1000).toISOString().slice(0, 10)}>
+                {new Date(page.updated * 1000).toLocaleDateString('ja-JP')}
+              </time>
             </p>
           </div>
         </a>

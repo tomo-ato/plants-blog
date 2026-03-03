@@ -24,12 +24,12 @@ const parsedContent = pageData.lines
   <nav class="breadcrumb" aria-label="パンくずリスト">
     <a href="/">TOP</a>
     <span class="sep">›</span>
-    <span class="current">About Me</span>
+    <span class="current" aria-current="page">About Me</span>
   </nav>
   <h1>{pageData.title || 'About Me'}</h1>
-  <div class="content">
+  <article class="content">
     {parsedContent.map((item) => (
       <Fragment set:html={item.html} />
     ))}
-  </div>
+  </article>
 </Layout>

@@ -49,7 +49,7 @@ const displayTitle = (pageData.title || '').replace(/^【memo】\s*/, '') || 'To
           {i > 0 && <span class="sep">›</span>}
           {crumb.href
             ? <a href={crumb.href}>{crumb.label}</a>
-            : <span class="current">{crumb.label}</span>
+            : <span class="current" aria-current="page">{crumb.label}</span>
           }
         </>
       ))}
@@ -58,15 +58,15 @@ const displayTitle = (pageData.title || '').replace(/^【memo】\s*/, '') || 'To
     <a href="/" class="back-link">← 一覧に戻る</a>
   )}
   <h1>{displayTitle}</h1>
-  <div class="page-title-meta">
+  <header class="page-title-meta">
     <div class="meta-row">
       {categoryLabel && (
         <span class={`page-category cat-${genus}`}>{categoryLabel}</span>
       )}
       {pageData.created && (
         <>
-          <span class="meta-date">作成: {new Date(pageData.created * 1000).toLocaleDateString('ja-JP')}</span>
-          <span class="meta-date">更新: {new Date(pageData.updated * 1000).toLocaleDateString('ja-JP')}</span>
+          <span class="meta-date">作成: <time datetime={new Date(pageData.created * 1000).toISOString().slice(0, 10)}>{new Date(pageData.created * 1000).toLocaleDateString('ja-JP')}</time></span>
+          <span class="meta-date">更新: <time datetime={new Date(pageData.updated * 1000).toISOString().slice(0, 10)}>{new Date(pageData.updated * 1000).toLocaleDateString('ja-JP')}</time></span>
         </>
       )}
     </div>
@@ -77,12 +77,12 @@ const displayTitle = (pageData.title || '').replace(/^【memo】\s*/, '') || 'To
         ))}
       </div>
     )}
-  </div>
-  <div class="content">
+  </header>
+  <article class="content">
     {parsedContent.map((item) => (
       <Fragment set:html={item.html} />
     ))}
-  </div>
+  </article>
 </Layout>
 
 <style>
