@@ -65,8 +65,8 @@ const displayTitle = (pageData.title || '').replace(/^【memo】\s*/, '') || 'To
       )}
       {pageData.created && (
         <>
-          <span class="meta-date">作成: <time datetime={new Date(pageData.created * 1000).toISOString().slice(0, 10)}>{new Date(pageData.created * 1000).toLocaleDateString('ja-JP')}</time></span>
           <span class="meta-date">更新: <time datetime={new Date(pageData.updated * 1000).toISOString().slice(0, 10)}>{new Date(pageData.updated * 1000).toLocaleDateString('ja-JP')}</time></span>
+          <span class="meta-date">作成: <time datetime={new Date(pageData.created * 1000).toISOString().slice(0, 10)}>{new Date(pageData.created * 1000).toLocaleDateString('ja-JP')}</time></span>
         </>
       )}
     </div>

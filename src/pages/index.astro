@@ -14,15 +14,25 @@ const pages = data.pages
   .map((p) => ({
     id: p.id.slice(0, 12),
     title: p.title,
+    created: p.created,
     updated: p.updated,
     image: p.image ? convertToR2Url(p.image) : null,
     genus: getCategory(p.title).genus as string,
+    genusLabel: GENUS_LABELS[getCategory(p.title).genus as string] ?? '',
   }));
 ---
 
 <Layout title="Tomo at plants." maxWidth="1000px">
   <h1>Tomo at plants.</h1>
   <p class="site-lead">コレクションしている植物について、雑記を書いたり生育状況を管理したりするサイトです</p>
+
+  <section aria-labelledby="pickup-heading">
+    <h2 class="section-title" id="pickup-heading">ピックアップ</h2>
+    <ul class="page-grid" id="pickup-grid"></ul>
+  </section>
+
+  <section aria-labelledby="all-heading">
+    <h2 class="section-title" id="all-heading">すべての記事</h2>
   <ul class="page-grid">
     {pages.map((page) => (
       <li class="page-card">
@@ -39,22 +49,59 @@ const pages = data.pages
             </span>
             <p class="card-title">{page.title}</p>
             <p class="card-date">
-              <time datetime={new Date(page.updated * 1000).toISOString().slice(0, 10)}>
-                {new Date(page.updated * 1000).toLocaleDateString('ja-JP')}
-              </time>
+              更新: <time datetime={new Date(page.updated * 1000).toISOString().slice(0, 10)}>{new Date(page.updated * 1000).toLocaleDateString('ja-JP')}</time>
+              　作成: <time datetime={new Date(page.created * 1000).toISOString().slice(0, 10)}>{new Date(page.created * 1000).toLocaleDateString('ja-JP')}</time>
             </p>
           </div>
         </a>
       </li>
     ))}
   </ul>
+  </section>
 </Layout>
 
-<style>
+<script define:vars={{ pages }} is:inline>
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  const arr = pages.slice();
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+  }
+  const picks = arr.slice(0, 4);
+  const grid = document.getElementById('pickup-grid');
+  if (grid) {
+    grid.innerHTML = picks.map(p => `
+      <li class="page-card">
+        <a href="/page/${esc(p.id)}">
+          <div class="card-thumb">
+            ${p.image ? `<img src="${esc(p.image)}" alt="${esc(p.title)}" loading="lazy">` : '<div class="card-thumb-placeholder"></div>'}
+          </div>
+          <div class="card-body">
+            <span class="card-category cat-${esc(p.genus)}">${esc(p.genusLabel)}</span>
+            <p class="card-title">${esc(p.title)}</p>
+            <p class="card-date">更新: <time datetime="${new Date(p.updated * 1000).toISOString().slice(0, 10)}">${new Date(p.updated * 1000).toLocaleDateString('ja-JP')}</time>　作成: <time datetime="${new Date(p.created * 1000).toISOString().slice(0, 10)}">${new Date(p.created * 1000).toLocaleDateString('ja-JP')}</time></p>
+          </div>
+        </a>
+      </li>
+    `).join('');
+  }
+</script>
+
+<style is:global>
   .site-lead {
     color: #666;
     font-size: 0.95em;
     margin: -18px 0 24px;
+  }
+  .section-title {
+    font-size: 0.9em;
+    font-weight: 700;
+    color: #555;
+    margin: 28px 0 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #e0e0e0;
   }
 
   /* リスト */
