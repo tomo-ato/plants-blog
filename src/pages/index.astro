@@ -49,8 +49,8 @@ const pages = data.pages
             </span>
             <p class="card-title">{page.title}</p>
             <p class="card-date">
-              更新: <time datetime={new Date(page.updated * 1000).toISOString().slice(0, 10)}>{new Date(page.updated * 1000).toLocaleDateString('ja-JP')}</time>
-              　作成: <time datetime={new Date(page.created * 1000).toISOString().slice(0, 10)}>{new Date(page.created * 1000).toLocaleDateString('ja-JP')}</time>
+              <span>更新: <time datetime={new Date(page.updated * 1000).toISOString().slice(0, 10)}>{new Date(page.updated * 1000).toLocaleDateString('ja-JP')}</time></span>
+              <span>作成: <time datetime={new Date(page.created * 1000).toISOString().slice(0, 10)}>{new Date(page.created * 1000).toLocaleDateString('ja-JP')}</time></span>
             </p>
           </div>
         </a>
@@ -81,7 +81,7 @@ const pages = data.pages
           <div class="card-body">
             <span class="card-category cat-${esc(p.genus)}">${esc(p.genusLabel)}</span>
             <p class="card-title">${esc(p.title)}</p>
-            <p class="card-date">更新: <time datetime="${new Date(p.updated * 1000).toISOString().slice(0, 10)}">${new Date(p.updated * 1000).toLocaleDateString('ja-JP')}</time>　作成: <time datetime="${new Date(p.created * 1000).toISOString().slice(0, 10)}">${new Date(p.created * 1000).toLocaleDateString('ja-JP')}</time></p>
+            <p class="card-date"><span>更新: <time datetime="${new Date(p.updated * 1000).toISOString().slice(0, 10)}">${new Date(p.updated * 1000).toLocaleDateString('ja-JP')}</time></span><span>作成: <time datetime="${new Date(p.created * 1000).toISOString().slice(0, 10)}">${new Date(p.created * 1000).toLocaleDateString('ja-JP')}</time></span></p>
           </div>
         </a>
       </li>
@@ -210,6 +210,8 @@ const pages = data.pages
 
   /* 更新日 */
   .card-date {
+    display: flex;
+    gap: 8px;
     font-size: 0.75em;
     color: #767676;
     margin: 0;
