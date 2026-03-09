@@ -48,10 +48,7 @@ const pages = data.pages
               {GENUS_LABELS[page.genus]}
             </span>
             <p class="card-title">{page.title}</p>
-            <p class="card-date">
-              <span>更新: <time datetime={new Date(page.updated * 1000).toISOString().slice(0, 10)}>{new Date(page.updated * 1000).toLocaleDateString('ja-JP')}</time></span>
-              <span>作成: <time datetime={new Date(page.created * 1000).toISOString().slice(0, 10)}>{new Date(page.created * 1000).toLocaleDateString('ja-JP')}</time></span>
-            </p>
+            <p class="card-date"><span>更新: <time datetime={new Date(page.updated * 1000).toISOString().slice(0, 10)}>{new Date(page.updated * 1000).toLocaleDateString('ja-JP')}</time></span><span>作成: <time datetime={new Date(page.created * 1000).toISOString().slice(0, 10)}>{new Date(page.created * 1000).toLocaleDateString('ja-JP')}</time></span></p>
           </div>
         </a>
       </li>
