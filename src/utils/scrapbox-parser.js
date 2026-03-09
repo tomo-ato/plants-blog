@@ -168,14 +168,20 @@ export function parseScrapboxContent(lines, titleToId = {}, titleToImage = {}) {
       items.push({ type: 'quote', html: `<blockquote>${prevInner}<br>${currInner}</blockquote>` });
     }
 
-    // 直前が画像でテキスト行 → figure + figcaption にまとめる
+    // 直前が画像でテキスト行またはdefitem行 → figure + figcaption にまとめる
     else if (
-      item.type === 'text' &&
+      (item.type === 'text' || item.type === 'defitem') &&
       items.length > 0 &&
       items[items.length - 1].type === 'image'
     ) {
       const prev = items.pop();
-      const captionHtml = item.html.replace(/^<p>/, '').replace(/<\/p>$/, '');
+      let captionHtml;
+      if (item.type === 'text') {
+        captionHtml = item.html.replace(/^<p>/, '').replace(/<\/p>$/, '');
+      } else {
+        // <dt>key</dt><dd>value</dd> → key：value
+        captionHtml = item.html.replace(/^<dt>/, '').replace(/<\/dt><dd>/, '：').replace(/<\/dd>$/, '');
+      }
       items.push({
         type: 'figure',
         html: `<figure>${prev.html}<figcaption>${captionHtml}</figcaption></figure>`,
