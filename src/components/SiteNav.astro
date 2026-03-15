@@ -1,9 +1,26 @@
 ---
+import { TILLANDSIA_PARENTS, PROJECT_NAME } from '../utils/categories.js';
+
 const pathname = Astro.url.pathname;
+
+// showInNav フラグを持つ親種ページのIDを取得
+const navParents = TILLANDSIA_PARENTS.filter((p) => p.showInNav);
+const navParentItems: { label: string; href: string }[] = [];
+if (navParents.length > 0) {
+  const res = await fetch(`https://scrapbox.io/api/pages/${PROJECT_NAME}?limit=1000`);
+  const data = await res.json();
+  for (const parent of navParents) {
+    const page = data.pages.find((p: { title: string; id: string }) => p.title === parent.title);
+    if (page) {
+      navParentItems.push({ label: parent.title, href: `/page/${page.id.slice(0, 12)}` });
+    }
+  }
+}
 
 const navItems = [
   { label: 'TOP', href: '/' },
   { label: 'Tillandsia', href: '/genus/tillandsia' },
+  ...navParentItems,
   { label: 'Oxalis', href: '/genus/oxalis' },
   { label: 'Lepanthes', href: '/genus/lepanthes' },
   { label: 'Avonia', href: '/genus/avonia' },

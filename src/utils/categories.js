@@ -39,6 +39,11 @@ export const TILLANDSIA_PARENTS = [
     title: 'Tillandsia tricholepis',
     prefixes: ['Tillandsia tricholepis'],
   },
+  {
+    title: 'Tillandsia aizoides',
+    prefixes: ['Tillandsia aizoides'],
+    showInNav: true,
+  },
 ];
 
 /**
