@@ -9,6 +9,11 @@ const data = await response.json();
 const PLANT_GENERA = new Set(Object.keys(GENUS_LABELS));
 const PARENT_TITLES = new Set(TILLANDSIA_PARENTS.map((p) => p.title));
 
+const PLANT_ONLY_GENERA = new Set(['tillandsia', 'oxalis', 'lepanthes', 'avonia']);
+const plantCount = (data.pages as { title: string }[]).filter(
+  (p) => PLANT_ONLY_GENERA.has(getCategory(p.title).genus ?? '') && !PARENT_TITLES.has(p.title)
+).length;
+
 const pages = data.pages
   .filter((p) => PLANT_GENERA.has(getCategory(p.title).genus) && !PARENT_TITLES.has(p.title))
   .map((p) => ({
@@ -25,6 +30,7 @@ const pages = data.pages
 <Layout title="Tomo at plants." maxWidth="1000px">
   <h1>Tomo at plants.</h1>
   <p class="site-lead">コレクションしている植物について、雑記を書いたり生育状況を管理したりするサイトです</p>
+  <p class="plant-count">現在の掲載数：<strong>{plantCount}</strong></p>
 
   <section aria-labelledby="pickup-heading">
     <h2 class="section-title" id="pickup-heading">ピックアップ</h2>
@@ -90,7 +96,15 @@ const pages = data.pages
   .site-lead {
     color: #666;
     font-size: 0.95em;
-    margin: -18px 0 24px;
+    margin: -18px 0 8px;
+  }
+  .plant-count {
+    font-size: 0.85em;
+    color: #888;
+    margin: 0 0 24px;
+  }
+  .plant-count strong {
+    color: #555;
   }
   .section-title {
     font-size: 0.9em;
