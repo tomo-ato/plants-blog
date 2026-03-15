@@ -18,7 +18,7 @@ const pages = data.pages
   .filter((p) => PLANT_GENERA.has(getCategory(p.title).genus) && !PARENT_TITLES.has(p.title))
   .map((p) => ({
     id: p.id.slice(0, 12),
-    title: p.title,
+    title: p.title.replace(/^【memo】\s*/, ''),
     created: p.created,
     updated: p.updated,
     image: p.image ? convertToR2Url(p.image) : null,
