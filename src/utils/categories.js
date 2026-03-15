@@ -42,7 +42,6 @@ export const TILLANDSIA_PARENTS = [
   {
     title: 'Tillandsia aizoides',
     prefixes: ['Tillandsia aizoides'],
-    showInNav: true,
   },
 ];
 
