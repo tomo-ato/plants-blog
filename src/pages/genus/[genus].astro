@@ -35,6 +35,7 @@ if (genus === 'tillandsia') {
       groups.push({ parent: parentPage, children });
     }
   }
+  groups.sort((a, b) => (a.parent?.title ?? '').localeCompare(b.parent?.title ?? ''));
 }
 
 // 他属: A-Z ソート
