@@ -8,7 +8,14 @@
       "Bash(curl:*)",
       "Bash(python3:*)",
       "Bash(echo:*)",
-      "Bash(python:*)"
+      "Bash(python:*)",
+      "Bash(git status:*)",
+      "Bash(node -e:*)",
+      "Bash(node:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm run sync-tags:*)",
+      "Bash(cmd /c update.bat)",
+      "Bash(cat src/pages/genus/[genus].astro)"
     ]
   }
 }
